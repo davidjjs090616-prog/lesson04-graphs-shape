@@ -33,12 +33,13 @@ def load_data(url: str) -> pd.DataFrame:
     return df
 
 
-def insight_box(default_text: str = ""):
+def insight_box(key: str, default_text: str = ""):
     """그래프 아래에 '이 그래프로 알 수 있는 것' 한 문장을 적는 자리를 만듭니다."""
     st.text_input(
         "💡 이 그래프로 알 수 있는 것",
         value=default_text,
         placeholder="이 그래프를 보고 알 수 있는 점을 한 문장으로 적어 보세요.",
+        key=key,
     )
 
 
@@ -88,7 +89,7 @@ fig_genre.update_traces(
 fig_genre.update_layout(legend_title_text="장르")
 
 st.plotly_chart(fig_genre, use_container_width=True)
-insight_box()
+insight_box(key="insight_1")
 
 st.divider()
 
@@ -111,7 +112,7 @@ fig_treemap.update_traces(
 fig_treemap.update_layout(margin=dict(t=50, l=10, r=10, b=10))
 
 st.plotly_chart(fig_treemap, use_container_width=True)
-insight_box()
+insight_box(key="insight_2")
 
 st.divider()
 
@@ -150,7 +151,7 @@ st.markdown(
     f"(총 관객 **{top_movie_row['total_audi']:,.0f}명**)입니다."
 )
 
-insight_box()
+insight_box(key="insight_3")
 
 st.divider()
 
@@ -175,11 +176,11 @@ fig_scatter.update_traces(
 )
 
 st.plotly_chart(fig_scatter, use_container_width=True)
-insight_box()
+insight_box(key="insight_4")
 
 st.divider()
 
 # ----------------------------------------------------------------------------
 # (다음 그래프는 이 아래에 같은 방식으로 구역을 추가하면 됩니다)
-# 예: st.header("5. ...") -> 그래프 그리기 -> insight_box() -> st.divider()
+# 예: st.header("5. ...") -> 그래프 그리기 -> insight_box(key="insight_5") -> st.divider()
 # ----------------------------------------------------------------------------
