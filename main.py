@@ -246,6 +246,28 @@ insight_box(key="insight_6")
 st.divider()
 
 # ----------------------------------------------------------------------------
+# 구역 7. 제작 국가 안 장르별 영화 편수 - 선버스트
+# ----------------------------------------------------------------------------
+st.header("7. 제작 국가 안 장르별 영화 편수 (선버스트)")
+
+sunburst_df = df.dropna(subset=["nation", "genre"])
+
+fig_sunburst = px.sunburst(
+    sunburst_df,
+    path=["nation", "genre"],
+    title="제작 국가별 장르 분포 (칸 크기: 영화 편수)",
+)
+fig_sunburst.update_traces(
+    hovertemplate="<b>%{label}</b><br>영화 수: %{value}편<br>비율: %{percentParent:.1%}<extra></extra>",
+)
+fig_sunburst.update_layout(margin=dict(t=50, l=10, r=10, b=10))
+
+st.plotly_chart(fig_sunburst, use_container_width=True)
+insight_box(key="insight_7")
+
+st.divider()
+
+# ----------------------------------------------------------------------------
 # (다음 그래프는 이 아래에 같은 방식으로 구역을 추가하면 됩니다)
-# 예: st.header("7. ...") -> 그래프 그리기 -> insight_box(key="insight_7") -> st.divider()
+# 예: st.header("8. ...") -> 그래프 그리기 -> insight_box(key="insight_8") -> st.divider()
 # ----------------------------------------------------------------------------
