@@ -155,6 +155,31 @@ insight_box()
 st.divider()
 
 # ----------------------------------------------------------------------------
+# 구역 4. 개봉일 스크린수 vs 총 관객 - 산점도
+# ----------------------------------------------------------------------------
+st.header("4. 개봉일 스크린수와 총 관객의 관계")
+
+scatter_df = df.dropna(subset=["first_scrn", "total_audi", "genre", "movieNm"])
+
+fig_scatter = px.scatter(
+    scatter_df,
+    x="first_scrn",
+    y="total_audi",
+    color="genre",
+    hover_name="movieNm",
+    title="개봉일 스크린수 vs 총 관객",
+    labels={"first_scrn": "개봉일 스크린수", "total_audi": "총 관객(명)", "genre": "장르"},
+)
+fig_scatter.update_traces(
+    hovertemplate="<b>%{hovertext}</b><br>스크린수: %{x:,.0f}개<br>총 관객: %{y:,.0f}명<extra></extra>",
+)
+
+st.plotly_chart(fig_scatter, use_container_width=True)
+insight_box()
+
+st.divider()
+
+# ----------------------------------------------------------------------------
 # (다음 그래프는 이 아래에 같은 방식으로 구역을 추가하면 됩니다)
-# 예: st.header("4. ...") -> 그래프 그리기 -> insight_box() -> st.divider()
+# 예: st.header("5. ...") -> 그래프 그리기 -> insight_box() -> st.divider()
 # ----------------------------------------------------------------------------
