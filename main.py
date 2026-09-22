@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import plotly.express as px
 
 # ----------------------------------------------------------------------------
@@ -115,6 +116,45 @@ insight_box()
 st.divider()
 
 # ----------------------------------------------------------------------------
+# 구역 3. 총 관객 분포 - 히스토그램
+# ----------------------------------------------------------------------------
+st.header("3. 총 관객(total_audi) 분포")
+
+hist_df = df.dropna(subset=["total_audi"])
+
+fig_hist = px.histogram(
+    hist_df,
+    x="total_audi",
+    nbins=20,
+    title="영화별 총 관객 분포",
+    labels={"total_audi": "총 관객(명)"},
+)
+fig_hist.update_traces(
+    hovertemplate="구간: %{x}<br>영화 수: %{y}편<extra></extra>",
+)
+fig_hist.update_layout(yaxis_title="영화 수(편)")
+
+st.plotly_chart(fig_hist, use_container_width=True)
+
+# 가장 영화가 많이 몰린 구간과, 총 관객이 가장 많은 영화를 계산해서 문구로 표시
+counts, bin_edges = np.histogram(hist_df["total_audi"], bins=20)
+top_bin_idx = counts.argmax()
+bin_start, bin_end = bin_edges[top_bin_idx], bin_edges[top_bin_idx + 1]
+
+top_movie_row = hist_df.loc[hist_df["total_audi"].idxmax()]
+
+st.markdown(
+    f"📌 대부분의 영화는 총 관객 **{bin_start:,.0f}명 ~ {bin_end:,.0f}명** 구간에 "
+    f"가장 많이 몰려 있습니다(해당 구간 영화 수: **{counts[top_bin_idx]}편**). "
+    f"가장 관객이 많은 영화는 **'{top_movie_row['movieNm']}'**"
+    f"(총 관객 **{top_movie_row['total_audi']:,.0f}명**)입니다."
+)
+
+insight_box()
+
+st.divider()
+
+# ----------------------------------------------------------------------------
 # (다음 그래프는 이 아래에 같은 방식으로 구역을 추가하면 됩니다)
-# 예: st.header("3. ...") -> 그래프 그리기 -> insight_box() -> st.divider()
+# 예: st.header("4. ...") -> 그래프 그리기 -> insight_box() -> st.divider()
 # ----------------------------------------------------------------------------
