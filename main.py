@@ -268,6 +268,57 @@ insight_box(key="insight_7")
 st.divider()
 
 # ----------------------------------------------------------------------------
+# 구역 8. [학생이 만든 질문] 10위권에 오래 머문 영화는 총 관객도 많은가 - 산점도
+# ----------------------------------------------------------------------------
+st.header("8. 10위권에 오래 머문 영화는 총 관객도 많은가")
+
+student_scatter_df = df.dropna(subset=["days_in_top10", "total_audi", "movieNm"])
+
+fig_student_scatter = px.scatter(
+    student_scatter_df,
+    x="days_in_top10",
+    y="total_audi",
+    hover_name="movieNm",
+    title="10위권에 오래 머문 영화는 총 관객도 많은가",
+    labels={"days_in_top10": "10위권에 머문 날수", "total_audi": "총 관객(명)"},
+)
+fig_student_scatter.update_traces(
+    hovertemplate="<b>%{hovertext}</b><br>10위권 유지: %{x}일<br>총 관객: %{y:,.0f}명<extra></extra>",
+)
+
+st.plotly_chart(fig_student_scatter, use_container_width=True)
+insight_box(key="insight_8")
+
+st.divider()
+
+# ----------------------------------------------------------------------------
+# 구역 9. 제작 국가별로 개봉 첫 주 관객 수 분포는 어떻게 다른가 - 박스플롯
+# ----------------------------------------------------------------------------
+st.header("9. 제작 국가별로 개봉 첫 주 관객 수 분포는 어떻게 다른가")
+
+nation_box_df = df.dropna(subset=["nation", "first_week_audi", "movieNm"])
+nation_movie_counts = nation_box_df["nation"].value_counts()
+major_nations = nation_movie_counts[nation_movie_counts >= 10].index
+nation_box_df = nation_box_df[nation_box_df["nation"].isin(major_nations)]
+
+fig_nation_box = px.box(
+    nation_box_df,
+    x="nation",
+    y="first_week_audi",
+    hover_data={"movieNm": True, "nation": False},
+    title="제작 국가별로 개봉 첫 주 관객 수 분포는 어떻게 다른가",
+    labels={"nation": "제작 국가", "first_week_audi": "개봉 첫 주 관객(명)"},
+)
+fig_nation_box.update_traces(
+    hovertemplate="<b>%{customdata[0]}</b><br>첫 주 관객: %{y:,.0f}명<extra></extra>",
+)
+
+st.plotly_chart(fig_nation_box, use_container_width=True)
+insight_box(key="insight_9")
+
+st.divider()
+
+# ----------------------------------------------------------------------------
 # (다음 그래프는 이 아래에 같은 방식으로 구역을 추가하면 됩니다)
-# 예: st.header("8. ...") -> 그래프 그리기 -> insight_box(key="insight_8") -> st.divider()
+# 예: st.header("10. ...") -> 그래프 그리기 -> insight_box(key="insight_10") -> st.divider()
 # ----------------------------------------------------------------------------
