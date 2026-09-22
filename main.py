@@ -181,6 +181,33 @@ insight_box(key="insight_4")
 st.divider()
 
 # ----------------------------------------------------------------------------
+# 구역 5. 영화 10편 이상인 장르의 총 관객 분포 - 박스플롯
+# ----------------------------------------------------------------------------
+st.header("5. 장르별 총 관객 분포 (영화 10편 이상인 장르만)")
+
+box_df = df.dropna(subset=["genre", "total_audi", "movieNm"])
+genre_movie_counts = box_df["genre"].value_counts()
+major_genres = genre_movie_counts[genre_movie_counts >= 10].index
+box_df = box_df[box_df["genre"].isin(major_genres)]
+
+fig_box = px.box(
+    box_df,
+    x="genre",
+    y="total_audi",
+    hover_data={"movieNm": True, "genre": False},
+    title="장르별 총 관객 분포 (영화 10편 이상)",
+    labels={"genre": "장르", "total_audi": "총 관객(명)"},
+)
+fig_box.update_traces(
+    hovertemplate="<b>%{customdata[0]}</b><br>총 관객: %{y:,.0f}명<extra></extra>",
+)
+
+st.plotly_chart(fig_box, use_container_width=True)
+insight_box(key="insight_5")
+
+st.divider()
+
+# ----------------------------------------------------------------------------
 # (다음 그래프는 이 아래에 같은 방식으로 구역을 추가하면 됩니다)
-# 예: st.header("5. ...") -> 그래프 그리기 -> insight_box(key="insight_5") -> st.divider()
+# 예: st.header("6. ...") -> 그래프 그리기 -> insight_box(key="insight_6") -> st.divider()
 # ----------------------------------------------------------------------------
