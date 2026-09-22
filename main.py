@@ -208,6 +208,44 @@ insight_box(key="insight_5")
 st.divider()
 
 # ----------------------------------------------------------------------------
+# 구역 6. 개봉일 스크린수 vs 총 관객 - 버블 그래프 (점 크기: 첫 주 관객)
+# ----------------------------------------------------------------------------
+st.header("6. 개봉일 스크린수와 총 관객의 관계 (버블: 첫 주 관객)")
+
+bubble_df = df.dropna(
+    subset=["first_scrn", "total_audi", "first_week_audi", "genre", "movieNm"]
+)
+bubble_df = bubble_df[bubble_df["first_week_audi"] > 0]
+
+fig_bubble = px.scatter(
+    bubble_df,
+    x="first_scrn",
+    y="total_audi",
+    size="first_week_audi",
+    color="genre",
+    hover_name="movieNm",
+    size_max=45,
+    title="개봉일 스크린수 vs 총 관객 (점 크기: 첫 주 관객)",
+    labels={
+        "first_scrn": "개봉일 스크린수",
+        "total_audi": "총 관객(명)",
+        "genre": "장르",
+        "first_week_audi": "첫 주 관객",
+    },
+)
+fig_bubble.update_traces(
+    hovertemplate=(
+        "<b>%{hovertext}</b><br>스크린수: %{x:,.0f}개<br>"
+        "총 관객: %{y:,.0f}명<br>첫 주 관객: %{marker.size:,.0f}명<extra></extra>"
+    ),
+)
+
+st.plotly_chart(fig_bubble, use_container_width=True)
+insight_box(key="insight_6")
+
+st.divider()
+
+# ----------------------------------------------------------------------------
 # (다음 그래프는 이 아래에 같은 방식으로 구역을 추가하면 됩니다)
-# 예: st.header("6. ...") -> 그래프 그리기 -> insight_box(key="insight_6") -> st.divider()
+# 예: st.header("7. ...") -> 그래프 그리기 -> insight_box(key="insight_7") -> st.divider()
 # ----------------------------------------------------------------------------
